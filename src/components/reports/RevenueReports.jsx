@@ -1,15 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useInvoice } from "../../context/InvoiceContext";
 import { GlassCard } from "../ui/GlassCard";
 import { DateRangePicker } from "../ui/DateRangePicker";
 import { CalendarView } from "./CalendarView";
-import { TrendingUp, Calendar, DollarSign, PieChart, Users, BarChart3, TrendingDown } from "lucide-react";
+import { TrendingUp, Calendar, DollarSign, PieChart, Users, BarChart3 } from "lucide-react";
 
-export function RevenueReports() {
+export function RevenueReports({ initialView = "overview", initialDateRange = null }) {
   const { invoiceHistory, formatCurrency } = useInvoice();
-  const [viewMode, setViewMode] = useState("overview"); // overview, monthly, clients, categories
+  const [viewMode, setViewMode] = useState(initialView); 
+  
+  // Update view mode if prop changes
+  useEffect(() => {
+     if (initialView) setViewMode(initialView);
+  }, [initialView]);
+
   const [timePeriod, setTimePeriod] = useState("month"); // day, month, year
-  const [dateRange, setDateRange] = useState(null); // { start, end }
+  const [dateRange, setDateRange] = useState(initialDateRange); // { start, end }
+
+  // Update date range if prop changes
+  useEffect(() => {
+    if (initialDateRange) setDateRange(initialDateRange);
+  }, [initialDateRange]);
 
   // Filter invoices by date range if set
   const filteredInvoices = dateRange
@@ -28,16 +39,10 @@ export function RevenueReports() {
   const clientData = {};
   const categoryData = {};
   let totalRevenue = 0;
-  let paidRevenue = 0;
-  let pendingRevenue = 0;
 
   filteredInvoices.forEach(inv => {
     const total = (inv.items || []).reduce((s, i) => s + (Number(i.quantity) * Number(i.price)), 0);
     totalRevenue += total;
-
-    // Payment status
-    if (inv.status === "paid") paidRevenue += total;
-    else pendingRevenue += total;
 
     const date = new Date(inv.date);
     
@@ -144,38 +149,19 @@ export function RevenueReports() {
       {viewMode === "overview" && (
         <>
           {/* Key Metrics */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <GlassCard className="p-5">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="p-2 bg-emerald-100 rounded-lg text-emerald-600">
-                  <DollarSign size={20} />
+          {/* Key Metrics */}
+          <div className="mb-6">
+            <GlassCard className="p-6">
+              <div className="flex items-center gap-4 mb-2">
+                <div className="p-3 bg-emerald-100 rounded-xl text-emerald-600">
+                  <DollarSign size={24} />
                 </div>
-                <h3 className="font-bold text-slate-800">Total Revenue</h3>
-              </div>
-              <p className="text-3xl font-bold text-emerald-600">{formatCurrency(totalRevenue)}</p>
-              <p className="text-xs text-slate-500 mt-1">{invoiceHistory.length} total invoices</p>
-            </GlassCard>
-
-            <GlassCard className="p-5">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="p-2 bg-blue-100 rounded-lg text-blue-600">
-                  <TrendingUp size={20} />
+                <div>
+                  <h3 className="font-bold text-slate-500 text-sm uppercase tracking-wider">Total Revenue</h3>
+                  <p className="text-4xl font-bold text-slate-800 mt-1">{formatCurrency(totalRevenue)}</p>
                 </div>
-                <h3 className="font-bold text-slate-800">Paid</h3>
               </div>
-              <p className="text-3xl font-bold text-blue-600">{formatCurrency(paidRevenue)}</p>
-              <p className="text-xs text-slate-500 mt-1">{((paidRevenue / totalRevenue) * 100 || 0).toFixed(1)}% of total</p>
-            </GlassCard>
-
-            <GlassCard className="p-5">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="p-2 bg-amber-100 rounded-lg text-amber-600">
-                  <TrendingDown size={20} />
-                </div>
-                <h3 className="font-bold text-slate-800">Pending</h3>
-              </div>
-              <p className="text-3xl font-bold text-amber-600">{formatCurrency(pendingRevenue)}</p>
-              <p className="text-xs text-slate-500 mt-1">{((pendingRevenue / totalRevenue) * 100 || 0).toFixed(1)}% of total</p>
+              <p className="text-sm text-slate-400 pl-16">{invoiceHistory.length} total invoices generated</p>
             </GlassCard>
           </div>
 

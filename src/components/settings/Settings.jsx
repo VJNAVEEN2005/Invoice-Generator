@@ -228,6 +228,84 @@ export function Settings() {
         </div>
       </GlassCard>
 
+      {/* AI Integration */}
+      <GlassCard>
+        <h2 className="text-xl font-semibold text-slate-800 mb-6 flex items-center gap-3">
+          <span className="w-1 h-6 bg-rose-500 rounded-full"/>
+          AI Integration
+        </h2>
+        
+        <div className="space-y-4">
+           {/* Enable Toggle */}
+           <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200 shadow-sm">
+              <div>
+                <div className="text-slate-800 font-medium mb-1">Enable AI Assistant</div>
+                <div className="text-sm text-slate-500 ">Allow the AI to help you manage invoices.</div>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  className="sr-only peer"
+                  checked={companySettings.enableAI || false}
+                  onChange={(e) => updateCompanySettings("enableAI", e.target.checked)}
+                />
+                <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent-primary shadow-inner"></div>
+              </label>
+           </div>
+
+            {/* API Key Input */}
+            <div className="space-y-2">
+               <label className="text-sm font-medium text-slate-700">Google Gemini API Key</label>
+               <div className="flex gap-2">
+                 <GlassInput 
+                   type="password"
+                   placeholder="Enter your API Key"
+                   value={companySettings.apiKey || ""}
+                   onChange={(e) => updateCompanySettings("apiKey", e.target.value)}
+                   className="flex-1"
+                 />
+                 <GlassButton variant="primary" onClick={async () => {
+                    // Force save global data immediately
+                    await saveGlobalData({
+                        companySettings,
+                        clients: savedClients,
+                        products: savedProducts
+                    });
+                    addToast("API Key saved successfully!", "success");
+                 }}>
+                    Save
+                 </GlassButton>
+               </div>
+               <p className="text-xs text-slate-500">
+                 Get your key from <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noreferrer" className="text-accent-primary hover:underline">Google AI Studio</a>.
+               </p>
+            </div>
+
+           {/* Model Selection Dropdown */}
+           <div className="space-y-2">
+              <label className="text-sm font-medium text-slate-700">Select AI Model</label>
+              <div className="relative">
+                <select
+                  value={companySettings.aiModel || "gemini-2.0-flash"}
+                  onChange={(e) => updateCompanySettings("aiModel", e.target.value)}
+                  className="w-full px-4 py-3 bg-white/50 backdrop-blur-md border border-white/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-accent-primary/20 text-slate-700 appearance-none shadow-sm transition-all text-sm"
+                >
+                  <option value="gemini-2.0-flash">Gemini 2.0 Flash (Standard)</option>
+                  <option value="gemini-2.0-flash-lite">Gemini 2.0 Flash-Lite (Cost-efficient)</option>
+                  <option value="gemini-2.5-flash">Gemini 2.5 Flash (Balanced)</option>
+                  <option value="gemini-2.5-flash-lite">Gemini 2.5 Flash-Lite (Ultra fast)</option>
+                  <option value="gemini-2.5-pro">Gemini 2.5 Pro (Reasoning)</option>
+                  <option value="gemini-3-flash-preview">Gemini 3 Flash (Next-gen speed)</option>
+                  <option value="gemini-3-pro-preview">Gemini 3 Pro (Most powerful)</option>
+                </select>
+                <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-slate-500">
+                  <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" fillRule="evenodd"></path></svg>
+                </div>
+              </div>
+           </div>
+        </div>
+      </GlassCard>
+
       {/* Export & Backup */}
       <GlassCard>
         <h2 className="text-xl font-semibold text-slate-800 mb-6 flex items-center gap-3">

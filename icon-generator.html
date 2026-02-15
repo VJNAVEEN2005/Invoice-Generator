@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Icon Generator</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #334155;
+        }
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+        h1 {
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+        }
+        p {
+            color: #64748b;
+            margin-bottom: 2rem;
+        }
+        canvas {
+            border-radius: 1rem;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            margin-bottom: 2rem;
+            max-width: 100%;
+            height: auto;
+        }
+        .btn {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            cursor: pointer;
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>App Icon Generator</h1>
+        <p>Since the AI service is busy, use this tool to generate your custom icon locally.</p>
+        
+        <div class="controls">
+            <input type="color" id="color1" value="#6366f1" title="Gradient Start">
+            <input type="color" id="color2" value="#ec4899" title="Gradient End">
+        </div>
+
+        <canvas id="iconCanvas" width="512" height="512"></canvas>
+        
+        <div>
+            <a id="downloadBtn" class="btn">Download Icon</a>
+        </div>
+        <p style="margin-top: 1rem; font-size: 0.875rem;">
+            Save as <code>icon.png</code> in <code>src-tauri/icons/</code>
+        </p>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('iconCanvas');
+        const ctx = canvas.getContext('2d');
+        const color1Input = document.getElementById('color1');
+        const color2Input = document.getElementById('color2');
+        const downloadBtn = document.getElementById('downloadBtn');
+
+        function drawIcon() {
+            // Background Gradient
+            const gradient = ctx.createLinearGradient(0, 0, 512, 512);
+            gradient.addColorStop(0, color1Input.value);
+            gradient.addColorStop(1, color2Input.value);
+            
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 512, 512);
+
+            // Glassmorphism Overlay
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.beginPath();
+            ctx.arc(256, -100, 400, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Document Icon
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
+            ctx.shadowBlur = 20;
+            ctx.shadowOffsetY = 10;
+
+            // Paper
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.roundRect(156, 128, 200, 256, 16);
+            ctx.fill();
+
+            // Lines
+            ctx.fillStyle = '#cbd5e1'; // light slate
+            ctx.shadowColor = 'transparent';
+            
+            // Header line
+            ctx.fillRect(196, 168, 120, 24);
+            
+            // Body lines
+            ctx.fillStyle = '#e2e8f0';
+            ctx.fillRect(196, 212, 120, 12);
+            ctx.fillRect(196, 244, 120, 12);
+            ctx.fillRect(196, 276, 80, 12);
+
+            // Checkmark Circle
+            ctx.beginPath();
+            ctx.arc(316, 344, 48, 0, Math.PI * 2);
+            ctx.fillStyle = color2Input.value; // Match gradient end
+            ctx.fill();
+
+            // Checkmark
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 8;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.beginPath();
+            ctx.moveTo(296, 344);
+            ctx.lineTo(312, 360);
+            ctx.lineTo(340, 324);
+            ctx.stroke();
+
+            updateDownloadLink();
+        }
+
+        function updateDownloadLink() {
+            const dataUrl = canvas.toDataURL('image/png');
+            downloadBtn.href = dataUrl;
+            downloadBtn.download = 'icon.png';
+        }
+
+        color1Input.addEventListener('input', drawIcon);
+        color2Input.addEventListener('input', drawIcon);
+
+        // Initial draw
+        drawIcon();
+    </script>
+</body>
+</html>

@@ -9,10 +9,13 @@ import { Settings } from "./components/settings/Settings";
 import { Dashboard } from "./components/dashboard/Dashboard";
 import { RevenueReports } from "./components/reports/RevenueReports";
 import { InvoiceProvider } from "./context/InvoiceContext";
+import { AIAssistant } from "./components/ai/AIAssistant";
 import "./App.css";
 
 function AppContent() {
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [reportView, setReportView] = useState("overview");
+  const [reportDateRange, setReportDateRange] = useState(null);
   const [editorMode, setEditorMode] = useState(false);
 
   return (
@@ -53,11 +56,22 @@ function AppContent() {
             
             {activeTab === "clients" && <ClientList />}
             {activeTab === "products" && <ProductList />}
-            {activeTab === "reports" && <RevenueReports />}
+            {activeTab === "reports" && <RevenueReports initialView={reportView} initialDateRange={reportDateRange} />}
             {activeTab === "settings" && <Settings />}
           </div>
         </div>
       </main>
+
+      <AIAssistant onNavigate={(tab, params) => {
+        setActiveTab(tab);
+        if (tab === "editor") setEditorMode(true);
+        else setEditorMode(false);
+        
+        if (tab === "reports") {
+           if (params?.view) setReportView(params.view);
+           if (params?.dateRange) setReportDateRange(params.dateRange);
+        }
+      }} />
     </div>
   );
 }

@@ -108,8 +108,51 @@ select option:hover {
   color: #ec4899;
 }
 
+
 select option:checked {
   background-color: #f1f5f9;
   color: #ec4899;
   font-weight: 600;
 }
+
+/* Voice Mode Animations */
+@keyframes pink-fade-blink {
+  0% {
+    box-shadow: inset 0 0 30 10px rgba(236, 72, 153, 0.5);
+  }
+  50% {
+    box-shadow: inset 0 0 60px 20px rgba(236, 72, 153, 0.5);
+  }
+  100% {
+    box-shadow: inset 0 0 30 10px rgba(236, 72, 153, 0.5);
+  }
+}
+
+.voice-mode-active::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  animation: pink-fade-blink 3s infinite ease-in-out;
+}
+
+/* Voice Visualizer Bars */
+.voice-bar {
+  width: 6px;
+  background: white;
+  border-radius: 999px;
+  animation: voice-bar-bounce 1s infinite ease-in-out;
+}
+
+@keyframes voice-bar-bounce {
+  0%, 100% { height: 10px; opacity: 0.5; }
+  50% { height: 40px; opacity: 1; }
+}
+
+.voice-bar:nth-child(1) { animation-delay: 0.0s; }
+.voice-bar:nth-child(2) { animation-delay: 0.1s; }
+.voice-bar:nth-child(3) { animation-delay: 0.2s; }
+.voice-bar:nth-child(4) { animation-delay: 0.3s; }
+.voice-bar:nth-child(5) { animation-delay: 0.4s; }
+

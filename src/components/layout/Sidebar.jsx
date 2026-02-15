@@ -47,14 +47,7 @@ export function Sidebar({ activeTab, onTabChange }) {
         })}
       </nav>
 
-      <div className="p-4 border-t border-slate-200">
-        <div className="bg-slate-50 rounded-xl p-4 border border-slate-200 hidden lg:block shadow-sm">
-           <div className="text-xs text-slate-500 mb-1 font-semibold">Pro Plan</div>
-           <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
-             <div className="h-full w-3/4 bg-gradient-to-r from-accent-primary to-accent-hover rounded-full" />
-           </div>
-        </div>
-      </div>
+
     </div>
   );
 }

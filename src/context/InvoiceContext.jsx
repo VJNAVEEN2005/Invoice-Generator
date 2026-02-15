@@ -38,7 +38,10 @@ export const InvoiceProvider = ({ children }) => {
     email: "",
     showInPreview: true,
     enableTax: true,
-    enableDiscount: false
+    enableDiscount: false,
+    enableAI: false,
+    apiKey: "",
+    aiModel: "gemini-2.0-flash"
   });
 
   // Derived: split drafts vs finalized
@@ -221,7 +224,6 @@ export const InvoiceProvider = ({ children }) => {
     updateSettings,
     companySettings,
     updateCompanySettings: (field, value) => setCompanySettings(prev => ({ ...prev, [field]: value })),
-    saveDraft,
     saveInvoiceFinal,
     createNewInvoice,
     loadInvoice,
