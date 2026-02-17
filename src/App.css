@@ -156,3 +156,74 @@ select option:checked {
 .voice-bar:nth-child(4) { animation-delay: 0.3s; }
 .voice-bar:nth-child(5) { animation-delay: 0.4s; }
 
+
+@media print {
+  @page {
+    margin: 0;
+    size: auto;
+  }
+
+  /* Reset layout constraints on root elements */
+  html, body {
+    width: 100%;
+    height: auto !important;
+    overflow: visible !important;
+    background: white !important;
+  }
+  
+  /* Hide everything and clear background */
+  body * {
+    visibility: hidden;
+  }
+
+  /* Target approach: Hide everything, show only preview and children */
+  #invoice-preview-container, 
+  #invoice-preview-container * {
+    visibility: visible;
+  }
+
+  #invoice-preview-container {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    z-index: 9999;
+    background: white; /* Important to cover anything behind */
+    
+    /* Reset all effects */
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    overflow: visible !important;
+    backdrop-filter: none !important;
+  }
+
+  #invoice-preview {
+    /* Reset container constraints */
+    width: 100% !important;
+    height: auto !important;
+    position: static !important; /* Let flow naturally inside the container */
+    overflow: visible !important;
+    box-shadow: none !important;
+    transform: none !important;
+    
+    /* Standard print setup */
+    margin: 0;
+    padding: 15mm !important; /* Some padding for content */
+  }
+
+  /* Ensure colors/backgrounds print */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide scrollbars */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+

@@ -17,6 +17,7 @@ export const InvoiceProvider = ({ children }) => {
       email: "",
       phone: "",
       address: "",
+      gstin: ""
     },
     items: [
       { id: crypto.randomUUID(), description: "Web Design Service", quantity: 1, price: 500 },
@@ -41,12 +42,16 @@ export const InvoiceProvider = ({ children }) => {
     enableDiscount: false,
     enableAI: false,
     apiKey: "",
-    aiModel: "gemini-2.0-flash"
+    aiModel: "gemini-2.0-flash",
+    enableGST: false,
+    gstin: ""
   });
 
   // Derived: split drafts vs finalized
   const drafts = allInvoices.filter(inv => inv.status === "draft");
   const invoiceHistory = allInvoices.filter(inv => inv.status === "saved");
+
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
 
   // --- Persistence ---
   useEffect(() => {
@@ -59,19 +64,21 @@ export const InvoiceProvider = ({ children }) => {
       }
       const all = await listInvoicesFromDisk();
       setAllInvoices(all);
+      setIsDataLoaded(true);
     }
     loadData();
   }, []);
 
   useEffect(() => {
+     if (!isDataLoaded) return;
      saveGlobalData({ clients: savedClients, products: savedProducts, companySettings });
-  }, [savedClients, savedProducts, companySettings]);
+  }, [savedClients, savedProducts, companySettings, isDataLoaded]);
 
   // Save as Draft
   const saveDraft = async () => {
     const draftInvoice = { ...invoice, status: "draft" };
-    const success = await saveInvoiceToDisk(draftInvoice);
-    if (success) {
+    const result = await saveInvoiceToDisk(draftInvoice);
+    if (result.success) {
       setInvoice(draftInvoice);
       setAllInvoices(prev => {
         const idx = prev.findIndex(inv => inv.id === draftInvoice.id);
@@ -79,14 +86,14 @@ export const InvoiceProvider = ({ children }) => {
         return [{ ...draftInvoice }, ...prev];
       });
     }
-    return success;
+    return result;
   };
 
   // Save as Finalized
   const saveInvoiceFinal = async () => {
     const finalInvoice = { ...invoice, status: "saved" };
-    const success = await saveInvoiceToDisk(finalInvoice);
-    if (success) {
+    const result = await saveInvoiceToDisk(finalInvoice);
+    if (result.success) {
       setInvoice(finalInvoice);
       setAllInvoices(prev => {
         const idx = prev.findIndex(inv => inv.id === finalInvoice.id);
@@ -94,7 +101,7 @@ export const InvoiceProvider = ({ children }) => {
         return [{ ...finalInvoice }, ...prev];
       });
     }
-    return success;
+    return result;
   };
 
   const createNewInvoice = () => {
@@ -108,7 +115,7 @@ export const InvoiceProvider = ({ children }) => {
       date: new Date().toISOString().slice(0, 10),
       dueDate: "",
       status: "new",
-      client: { name: "", email: "", phone: "", address: "" },
+      client: { name: "", email: "", phone: "", address: "", gstin: "" },
       items: [{ id: crypto.randomUUID(), description: "", quantity: 1, price: 0 }],
       taxRate: 10,
       discountRate: 0,
@@ -225,6 +232,7 @@ export const InvoiceProvider = ({ children }) => {
     companySettings,
     updateCompanySettings: (field, value) => setCompanySettings(prev => ({ ...prev, [field]: value })),
     saveInvoiceFinal,
+    saveDraft,
     createNewInvoice,
     loadInvoice,
     deleteInvoice,

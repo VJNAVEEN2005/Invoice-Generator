@@ -25,10 +25,10 @@ export async function saveInvoiceToDisk(invoice) {
             JSON.stringify(invoice, null, 2),
             { baseDir: BASE_DIR }
         );
-        return true;
+        return { success: true };
     } catch (err) {
         console.error("Failed to save invoice", err);
-        return false;
+        return { success: false, error: err.message || String(err) };
     }
 }
 
@@ -56,6 +56,7 @@ export async function loadGlobalData() {
     try {
         if (await exists(DATA_FILE, { baseDir: BASE_DIR })) {
             const content = await readTextFile(DATA_FILE, { baseDir: BASE_DIR });
+            if (!content || content.trim() === "") return null;
             return JSON.parse(content);
         }
     } catch (err) {

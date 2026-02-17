@@ -82,6 +82,59 @@ export function Settings() {
     }
   };
 
+  // Export History as CSV (Excel compatible)
+  const handleExportCSV = async () => {
+    try {
+      const allInvoices = await listInvoicesFromDisk();
+      if (!allInvoices || allInvoices.length === 0) {
+        addToast("No invoices to export.", "error");
+        return;
+      }
+
+      // Define headers
+      const headers = ["Invoice Number", "Date", "Client Name", "Client GSTIN", "Items", "Total Amount", "Status", "Notes"];
+      
+      // Map data to CSV rows
+      const rows = allInvoices.map(inv => [
+        `"${inv.id}"`, // Quote strings to handle commas
+        `"${inv.date}"`,
+        `"${inv.client.name.replace(/"/g, '""')}"`, // Escape quotes
+        `"${inv.client.gstin || ""}"`,
+        `"${inv.items.map(item => `${item.description.replace(/"/g, '""')} (${item.quantity} x ${item.price})`).join("; ")}"`, // Items summary
+        inv.items.reduce((sum, item) => sum + (Number(item.quantity) * Number(item.price)), 0).toFixed(2), 
+        // Note: Using calculated subtotal for simplicity in this csv view, or similar logic as before
+        (function(i) {
+            const sub = i.items.reduce((s, it) => s + (Number(it.quantity) * Number(it.price)), 0);
+            const disc = (companySettings.enableDiscount && i.discountRate) ? (sub * i.discountRate) / 100 : 0;
+            const tax = (companySettings.enableTax && i.taxRate) ? ((sub - disc) * i.taxRate) / 100 : 0;
+            return (sub - disc + tax).toFixed(2);
+        })(inv),
+        `"${inv.status}"`,
+        `"${(inv.notes || "").replace(/"/g, '""').replace(/\n/g, ' ')}"`
+      ]);
+
+      // Combine headers and rows
+      const csvContent = [
+        headers.join(","),
+        ...rows.map(r => r.join(","))
+      ].join("\n");
+
+      // Download
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `invoice_history_${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      addToast("History exported as CSV!", "success");
+
+    } catch (e) {
+        console.error(e);
+        addToast("CSV Export failed: " + e.message, "error");
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="mb-6">
@@ -204,8 +257,33 @@ export function Settings() {
         </h2>
         
         <div className="space-y-4">
+            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200 shadow-sm">
+                <div>
+                  <div className="text-slate-800 font-medium mb-1">Enable GST Features</div>
+                  <div className="text-sm text-slate-500 ">Show GSTIN fields on invoices.</div>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input 
+                    type="checkbox" 
+                    className="sr-only peer"
+                    checked={companySettings.enableGST || false}
+                    onChange={(e) => updateCompanySettings("enableGST", e.target.checked)}
+                  />
+                  <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent-primary shadow-inner"></div>
+                </label>
+            </div>
+
+            {companySettings.enableGST && (
+               <GlassInput 
+                  label="Company GSTIN" 
+                  placeholder="29ABCDE1234F1Z5"
+                  value={companySettings.gstin || ""}
+                  onChange={(e) => updateCompanySettings("gstin", e.target.value.toUpperCase())}
+               />
+            )}
+
             {[
-              { field: "showInPreview", label: "Show Company Details on Invoice", desc: "Toggle whether your company info appears on the generated PDF." },
+              { field: "showInPreview", label: "Show Company Details", desc: "Toggle whether your company info appears on the generated PDF." },
               { field: "enableTax", label: "Enable Tax Calculation", desc: "Automatically calculate and show tax on invoices." },
               { field: "enableDiscount", label: "Enable Discount", desc: "Allow applying a percentage discount to the subtotal." },
             ].map(toggle => (
@@ -321,7 +399,10 @@ export function Settings() {
             <h3 className="font-bold text-slate-800 ">Export Data</h3>
             <p className="text-sm text-slate-500 ">Download all your data as a JSON backup file.</p>
             <GlassButton onClick={handleExportData} className="w-full flex items-center justify-center gap-2">
-              <Download size={16} /> Export All Data
+              <Download size={16} /> Export All Data (JSON)
+            </GlassButton>
+            <GlassButton onClick={handleExportCSV} variant="secondary" className="w-full flex items-center justify-center gap-2 mt-2 bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100">
+              <Download size={16} /> Export History (Excel/CSV)
             </GlassButton>
           </div>
 

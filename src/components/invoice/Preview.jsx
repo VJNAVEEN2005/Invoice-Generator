@@ -1,24 +1,12 @@
 import { useInvoice } from "../../context/InvoiceContext";
 import { GlassCard } from "../ui/GlassCard";
-import { Download } from "lucide-react";
-import { generatePDF } from "../../services/pdf"; 
-import { GlassButton } from "../ui/GlassButton";
 
 export function Preview() {
   const { invoice, totals, formatCurrency, companySettings } = useInvoice();
 
-  const handleExport = async () => {
-    await generatePDF("invoice-preview", `Invoice-${invoice.id}.pdf`);
-  };
-
   return (
     <div className="flex flex-col h-full gap-4">
-      <div className="flex justify-end">
-        <GlassButton onClick={handleExport} className="flex items-center gap-2">
-            <Download size={18} />
-            Export PDF
-        </GlassButton>
-      </div>
+
 
       <div id="invoice-preview" className="bg-white text-slate-900 p-8 rounded-lg shadow-2xl h-full overflow-y-auto aspect-[1/1.414] text-sm relative"> {/* A4 Ratio approx */}
         
@@ -39,6 +27,9 @@ export function Preview() {
                     <p className="text-slate-500 whitespace-pre-wrap">{companySettings.address || "123 Business Rd\nCity, State 12345"}</p>
                     <p className="text-slate-500">{companySettings.phone}</p>
                     <p className="text-slate-500">{companySettings.email}</p>
+                    {companySettings.enableGST && companySettings.gstin && (
+                        <p className="text-slate-500 font-medium">GSTIN: {companySettings.gstin}</p>
+                    )}
                 </div>
             )}
         </div>
@@ -51,6 +42,9 @@ export function Preview() {
                 <p className="text-slate-600 whitespace-pre-wrap">{invoice.client.address}</p>
                 <p className="text-slate-600">{invoice.client.phone}</p>
                 <p className="text-slate-600">{invoice.client.email}</p>
+                {companySettings.enableGST && invoice.client.gstin && (
+                    <p className="text-slate-600 font-medium">GSTIN: {invoice.client.gstin}</p>
+                )}
             </div>
             <div className="text-right">
                 <div className="mb-2">
