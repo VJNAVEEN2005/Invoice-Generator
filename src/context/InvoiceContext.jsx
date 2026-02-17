@@ -60,7 +60,12 @@ export const InvoiceProvider = ({ children }) => {
       if (data) {
         if (data.clients) setSavedClients(data.clients);
         if (data.products) setSavedProducts(data.products);
-        if (data.companySettings) setCompanySettings(data.companySettings);
+        if (data.companySettings) {
+          setCompanySettings(prev => ({
+            ...prev,
+            ...data.companySettings
+          }));
+        }
       }
       const all = await listInvoicesFromDisk();
       setAllInvoices(all);
@@ -127,8 +132,29 @@ export const InvoiceProvider = ({ children }) => {
     setCompanySettings(prev => ({ ...prev, nextInvoiceNumber: nextNum + 1 }));
   };
 
+  // Helper: Default Invoice Structure
+  const getInvoiceDefaults = () => ({
+    id: "",
+    date: new Date().toISOString().slice(0, 10),
+    dueDate: "",
+    status: "new",
+    client: { name: "", email: "", phone: "", address: "", gstin: "" },
+    items: [],
+    taxRate: 10,
+    discountRate: 0,
+    currency: "INR",
+    notes: ""
+  });
+
   const loadInvoice = (inv) => {
-    setInvoice({ ...inv });
+    // Merge loaded invoice with default structure to ensure all fields exist
+    setInvoice({
+      ...getInvoiceDefaults(),
+      ...inv,
+      client: { ...getInvoiceDefaults().client, ...(inv.client || {}) },
+      // Items are dynamic, so just use what's loaded or empty array
+      items: Array.isArray(inv.items) ? inv.items : []
+    });
   };
 
   const deleteInvoice = async (id) => {

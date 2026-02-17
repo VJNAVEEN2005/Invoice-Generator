@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Generator - AI Powered Invoicing</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav>
+        <div class="container flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <img src="assets/logo.png" alt="Invoicer Logo" style="width: 32px; height: 32px; border-radius: 8px;">
+                <h3 class="font-bold text-xl">Invoicer</h3>
+            </div>
+            <div class="flex items-center gap-6">
+                <!-- <a href="#features" class="text-secondary hover:text-primary">Features</a>
+                <a href="#how-it-works" class="text-secondary hover:text-primary">How it Works</a> -->
+                <a href="https://github.com/VJNAVEEN2005/Invoice-Generator" target="_blank" class="glass-button-secondary flex items-center gap-2">
+                    <i data-lucide="github" width="16"></i> Star on GitHub
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container grid grid-cols-2 gap-8 items-center">
+            <div class="hero-content">
+
+                <h1>Invoicing, <br>Reimagined with AI.</h1>
+                <p>Create professional, GST-compliant invoices in seconds. Powered by Gemini AI for smart autofill and insights. 100% Offline & Private.</p>
+                <div class="flex gap-4">
+                    <a href="assets/Invoice Generator_0.1.0_x64-setup.exe" class="glass-button flex items-center gap-2">
+                        <i data-lucide="download" width="18"></i> Download for Windows
+                    </a>
+                </div>
+                <div class="flex items-center gap-4 mt-8 text-sm text-secondary">
+                    <div class="flex items-center gap-1">
+                        <i data-lucide="check-circle" size="16"></i> Free to use
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <i data-lucide="shield" size="16"></i> No signup required
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image animate-float">
+                <img src="assets/dashboard-preview.png" alt="Invoice Generator Dashboard" class="app-preview glass-panel" style="padding: 0; background: white; object-fit: cover;">
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Banner -->
+    <section class="trust-banner py-8">
+        <div class="container grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div>
+                <h3 class="text-xl font-bold text-accent">100% Free</h3>
+                <p class="text-sm text-secondary">Open Source</p>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold text-accent">Offline</h3>
+                <p class="text-sm text-secondary">No Internet Needed</p>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold text-accent">Private</h3>
+                <p class="text-sm text-secondary">Data Stored Locally</p>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold text-accent">GST Ready</h3>
+                <p class="text-sm text-secondary">Compliant Invoicing</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="py-20">
+        <div class="container">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl mb-4">Everything you need to get paid.</h2>
+                <p class="text-secondary">Simple enough for freelancers, powerful enough for small business.</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="glass-panel">
+                    <div class="feature-icon">
+                        <i data-lucide="sparkles"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">AI Powered</h3>
+                    <p class="text-secondary text-sm">Let Gemini AI draft invoice descriptions, categorize items, and provide business insights automatically.</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="glass-panel">
+                    <div class="feature-icon">
+                        <i data-lucide="calculator"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">GST Compliant</h3>
+                    <p class="text-secondary text-sm">Built-in GST handling. Automatically calculate taxes, manage GSTINs, and generate compliant bills.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="glass-panel">
+                    <div class="feature-icon">
+                        <i data-lucide="lock"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Offline & Private</h3>
+                    <p class="text-secondary text-sm">Your data stays on your device. Auto-saving to local disk means no cloud leaks and works without internet.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Large Feature: AI -->
+    <section class="py-20">
+        <div class="container grid grid-cols-2 gap-20 items-center">
+            <div class="order-2 md:order-1">
+                <div class="glass-panel" style="padding: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; background: transparent; border: none; box-shadow: none;">
+                     <img src="assets/ai-assistant.png" alt="AI Assistant" style="width: 100%; height: auto; border-radius: 24px; box-shadow: 0 10px 40px -10px rgba(0,0,0,0.1);">
+                </div>
+            </div>
+            <div class="order-1 md:order-2">
+                <h2 class="text-3xl mb-4">Smart Assistant</h2>
+                <p class="text-secondary mb-6">Stop typing the same things over and over. Our AI learns your products and clients to autocomplete your invoices instantly.</p>
+                <ul class="flex flex-col gap-3">
+                    <li class="flex items-center gap-2">
+                        <i data-lucide="check" class="text-accent" size="18"></i>
+                        <span>Smart Autocomplete</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i data-lucide="check" class="text-accent" size="18"></i>
+                        <span>Excel/CSV History Export</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i data-lucide="check" class="text-accent" size="18"></i>
+                        <span>WhatsApp & System Sharing</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <!-- How It Works -->
+    <section id="how-it-works" class="py-20 bg-white/50">
+        <div class="container">
+            <h2 class="text-3xl font-bold text-center mb-12">How it Works</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3 class="text-xl font-bold mb-2">Add Client</h3>
+                    <p class="text-sm text-secondary">Manually enter details or let AI auto-complete from your history.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3 class="text-xl font-bold mb-2">Add Items</h3>
+                    <p class="text-sm text-secondary">Type or speak your items. AI suggests prices and descriptions.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3 class="text-xl font-bold mb-2">Generate & Share</h3>
+                    <p class="text-sm text-secondary">Print to PDF instantly or share via WhatsApp with one click.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Setup Guide -->
+    <section id="ai-setup" class="py-20">
+        <div class="container">
+            <h2 class="text-3xl font-bold text-center mb-12">Setting up AI Features</h2>
+            <div class="glass-panel max-w-3xl mx-auto">
+                <div class="flex flex-col gap-6">
+                    <div>
+                        <h3 class="text-xl font-bold mb-2">Step 1: Get your Free API Key</h3>
+                        <p class="text-secondary mb-2">Go to Google AI Studio to get your Gemini API key. It's free of charge.</p>
+                        <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-accent hover:underline flex items-center gap-1">
+                            Get API Key <i data-lucide="external-link" width="16"></i>
+                        </a>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-bold mb-2">Step 2: Configure App</h3>
+                        <p class="text-secondary">Open the App -> Go to <strong>Settings</strong> -> <strong>AI Integration</strong>.</p>
+                        <div class="code-block">
+                            Paste your key starting with AIzaSy...
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-bold mb-2">Step 3: Start Invoicing</h3>
+                        <p class="text-secondary">Click the Microphone icon to speak commands or start typing to see AI suggestions!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature Documentation -->
+    <section id="features-doc" class="py-20 bg-white/50">
+        <div class="container">
+            <h2 class="text-3xl font-bold text-center mb-12">Everything included</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Doc 1 -->
+                <div class="doc-card">
+                    <h3><i data-lucide="mic" class="text-accent" width="20"></i> Voice Commands</h3>
+                    <p class="text-sm text-secondary mt-2">Use voice to navigate (e.g., "Go to Dashboard") or add items (e.g., "Add 2 Keyboards").</p>
+                </div>
+                <!-- Doc 2 -->
+                <div class="doc-card">
+                    <h3><i data-lucide="file-text" class="text-accent" width="20"></i> Smart Autocomplete</h3>
+                    <p class="text-sm text-secondary mt-2">The app learns your clients and products. Type a few letters to auto-fill entire forms.</p>
+                </div>
+                <!-- Doc 3 -->
+                <div class="doc-card">
+                    <h3><i data-lucide="printer" class="text-accent" width="20"></i> Print & PDF</h3>
+                    <p class="text-sm text-secondary mt-2">Generate professional PDFs instantly using the native system print dialog.</p>
+                </div>
+
+                <!-- Doc 5 -->
+                <div class="doc-card">
+                    <h3><i data-lucide="database" class="text-accent" width="20"></i> Local Backup</h3>
+                    <p class="text-sm text-secondary mt-2">Your data is yours. Export/Import JSON backups to keep your data safe or transfer devices.</p>
+                </div>
+                <!-- Doc 6 -->
+                <div class="doc-card">
+                    <h3><i data-lucide="share-2" class="text-accent" width="20"></i> Easy Sharing</h3>
+                    <p class="text-sm text-secondary mt-2">Share invoices directly via WhatsApp Desktop or your system's share sheet.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="py-20">
+        <div class="container max-w-3xl">
+            <h2 class="text-3xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <i data-lucide="help-circle" class="text-accent" width="20"></i>
+                    Is this app really free?
+                </div>
+                <p class="text-secondary text-sm pl-7">Yes! It is open-source software. You can use it indefinitely for free.</p>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <i data-lucide="wifi-off" class="text-accent" width="20"></i>
+                    Do I need internet?
+                </div>
+                <p class="text-secondary text-sm pl-7">No. The app works 100% offline. Internet is only required if you want to use the optional Gemini AI features.</p>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <i data-lucide="shield" class="text-accent" width="20"></i>
+                    Where is my data stored?
+                </div>
+                <p class="text-secondary text-sm pl-7">Locally on your device in your AppData folder. We do not have any servers and cannot see your invoices.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 mb-12 border-t border-border">
+        <div class="container text-center text-sm text-secondary">
+            <p>&copy; 2026 Invoicer App. Made with ❤️ and React.</p>
+        </div>
+    </footer>
+
+    <!-- Init Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
